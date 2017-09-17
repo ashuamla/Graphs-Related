@@ -1,0 +1,90 @@
+import java.util.LinkedList;
+
+public class Bellaman_Ford {
+	int V;
+	int E;
+	Edge edge[];
+	public Bellaman_Ford(int v, int e) {
+		V=v;
+		E=e;
+		edge=new Edge[E];
+		for(int i=0; i<E; i++)
+		{
+			edge[i]=new Edge();
+		}
+	}
+	
+	class Edge{
+		int src;
+		int dest;
+		int weight;
+		Edge()
+		{
+			src=dest=weight=0;
+		}
+		private void addEdge(int u, int v, int w) {
+			src=u;
+			dest=v;
+			weight=w;
+		}
+		
+	}
+	
+	private void bellaman(int src) {
+		int dist[]=new int[V];
+		for(int i=0; i<V; i++)
+		{
+			dist[i]=Integer.MAX_VALUE;
+		}
+		dist[src]=0;
+		
+		for(int i=0; i<V-1; i++)
+		{
+			for(int j=0; j<E; j++)
+			{
+				//Relaxing all edges |V-1| times
+				if(dist[edge[j].src]!=Integer.MAX_VALUE && dist[edge[j].src]+edge[j].weight<dist[edge[j].dest])
+				{
+					dist[edge[j].dest]=dist[edge[j].src]+edge[j].weight;
+				}
+			}
+		}
+		
+		int flag=0;
+		for(int j=0; j<E; j++)
+		{
+			if(dist[edge[j].src]+edge[j].weight<dist[edge[j].dest])
+			{
+				System.out.println("Negative Edge is found");
+				flag=1;
+				System.exit(0);
+			}
+		}
+		if(flag==0)
+		{
+			System.out.println("Shortest path by bellaman algorithm is given below: ");
+			for(int i=0; i<V; i++)
+			{
+				System.out.println(i+"\t"+dist[i]);
+			}
+		}
+	}
+	
+	public static void main(String[] args)
+	{
+		Bellaman_Ford b=new Bellaman_Ford(4,5);
+		b.edge[0].addEdge(0, 1, 2);
+		b.edge[1].addEdge(0, 2, 3);
+		b.edge[2].addEdge(1, 3, 1);
+		b.edge[3].addEdge(2, 3, 1);
+		b.edge[4].addEdge(2, 1, -2);
+		
+		b.bellaman(0);
+	}
+
+
+	
+
+	
+
+}
